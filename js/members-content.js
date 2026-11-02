@@ -221,7 +221,10 @@
       .order("sort_order", { ascending: true });
 
     if (error) throw error;
-    showList(videoList, videoEmpty, data || [], renderVideo);
+    const items = data || [];
+    if (!items.length) return;
+    videoEmpty.hidden = true;
+    showList(videoList, videoEmpty, items, renderVideo);
   }
 
   function openReader(item) {
