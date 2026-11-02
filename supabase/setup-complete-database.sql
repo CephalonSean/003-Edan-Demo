@@ -1523,7 +1523,16 @@ CREATE TABLE IF NOT EXISTS member_process_items (
   image_path text NOT NULL DEFAULT '',
   is_published boolean NOT NULL DEFAULT false,
   sort_order integer NOT NULL DEFAULT 0,
-  created_at timestamptz NOT NULL DEFAULT now()
+  created_at timestamptz NOT NULL DEFAULT now(),
+  content_type text NOT NULL DEFAULT 'project' CHECK (content_type IN ('project', 'update', 'video')),
+  is_featured boolean NOT NULL DEFAULT false,
+  progress_label text NOT NULL DEFAULT '',
+  updated_label text NOT NULL DEFAULT '',
+  video_path text NOT NULL DEFAULT '',
+  poster_path text NOT NULL DEFAULT '',
+  duration_label text NOT NULL DEFAULT '',
+  link_url text NOT NULL DEFAULT '',
+  link_label text NOT NULL DEFAULT 'View project'
 );
 
 ALTER TABLE member_process_items ENABLE ROW LEVEL SECURITY;
@@ -1569,6 +1578,20 @@ This sample shows how a research-style in-process note is presented.',
    'Field notes', '/images/garden-plant.jpg', 2)
 ) AS v(title, summary, body, category, image_path, sort_order)
 WHERE NOT EXISTS (SELECT 1 FROM member_process_items);
+
+INSERT INTO member_process_items (
+  title, summary, category, image_path, poster_path, content_type,
+  duration_label, updated_label, is_published, sort_order
+)
+SELECT
+  'Research in Practice',
+  'A look inside our studio and ongoing research at Ɛdan.',
+  'Studio journal', '/images/garden.jpg', '/images/garden.jpg', 'video',
+  '12:34', 'Featured', true, 90
+WHERE NOT EXISTS (
+  SELECT 1 FROM member_process_items
+  WHERE content_type = 'video' AND title = 'Research in Practice'
+);
 
 -- ===========================================================================
 -- 20. SAMPLE ROOMS

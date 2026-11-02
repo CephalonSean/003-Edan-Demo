@@ -281,13 +281,44 @@
 
     <!-- IN PROCESS -->
     <section class="members__block members__gated members__block--process" id="in-process" aria-labelledby="processTitle">
-      <div class="members__block-head">
-        <span class="members__eyebrow">02 / In Process</span>
-        <h2 id="processTitle">From behind<br>the scenes.</h2>
-        <p>Works in progress, studio notes and research activity will be shared here as they happen.</p>
-      </div>
-      <div class="members__process-list" id="processList" aria-live="polite">
+      <div class="members__process-page">
+        <header class="members__process-hero">
+          <img src="/images/breeze-block-detail.jpg" alt="Creative work in progress across a studio table" loading="lazy">
+          <div class="members__process-hero-copy">
+            <span class="members__eyebrow">02 / In Process</span>
+            <h2 id="processTitle">Work in progress.</h2>
+            <p>An ongoing collection of ideas, experiments and projects taking shape at Ɛdan.</p>
+          </div>
+        </header>
+
         <p class="members__empty" id="processEmpty">No work in progress has been shared yet.</p>
+
+        <section class="members__process-featured" id="processFeatured" aria-labelledby="featuredProcessTitle" hidden>
+          <div class="members__process-featured-media" id="featuredProcessMedia"></div>
+          <div class="members__process-featured-copy">
+            <span class="members__process-category" id="featuredProcessCategory"></span>
+            <h3 id="featuredProcessTitle"></h3>
+            <p id="featuredProcessSummary"></p>
+            <div class="members__process-meta"><span id="featuredProcessUpdated"></span><span id="featuredProcessProgress"></span></div>
+            <a class="members__process-link" id="featuredProcessLink" href="#in-process">View project <span aria-hidden="true">→</span></a>
+          </div>
+        </section>
+
+        <section class="members__process-section" aria-labelledby="ongoingProcessTitle">
+          <div class="members__process-section-heading"><h3 id="ongoingProcessTitle">Ongoing projects</h3><span>From the studio <span aria-hidden="true">→</span></span></div>
+          <div class="members__process-project-grid" id="processProjectList"></div>
+        </section>
+
+        <div class="members__process-lower-grid">
+          <section class="members__process-section members__process-updates" aria-labelledby="processUpdatesTitle">
+            <div class="members__process-section-heading"><h3 id="processUpdatesTitle">Project updates</h3><span>Studio journal</span></div>
+            <div class="members__process-update-list" id="processUpdateList"></div>
+          </section>
+          <section class="members__process-section members__process-video-section" aria-labelledby="processVideoTitle">
+            <div class="members__process-section-heading"><h3 id="processVideoTitle">Featured video</h3><span>Research in motion</span></div>
+            <div id="processVideoList"></div>
+          </section>
+        </div>
       </div>
     </section>
 
