@@ -5,14 +5,19 @@
 - Multi-page static website with homepage served at `/`; current technical context includes preview reliability.
 - Project includes admin workflows for signups, affiliate applications, bookings, membership applications, payments, and blocked dates.
 - Admin notifications should provide complete, professionally formatted operational details by email.
+- Homepage includes six destination cards with annual-member restrictions retained.
 
 ## Brand personality & voice
 
 - Admin-facing emails should be professional, clear, structured, and easy to scan.
+- Destination-card copy should follow the supplied reference’s concise editorial presentation.
 - No broader customer-facing brand voice has been established.
 
 ## Visual design & UX direction
 
+- Destination cards use pure white text for numbers, titles, and descriptions; avoid dark-brown or otherwise unintended text colors.
+- Card typography should match the supplied reference more closely, including title sizing, spacing, and text positioning.
+- Remove decorative arrow symbols from cards, including mobile layouts; arrows appeared emoji-like and should not be used.
 - Email templates should use consistent professional formatting across signup, affiliate, booking, application, and reminder notifications.
 - Booking notifications should mirror the information shown in the admin booking “View” screen, rather than providing only a summary.
 - Include clear labels, grouped details, status/context, and relevant dates or due dates.
@@ -35,6 +40,7 @@
 - Build currently succeeds; no known build error explains the preview issue.
 - Runtime/dev-server or browser-side preview behavior remains the likely area to investigate if preview problems recur.
 - Verify the referenced `neon-vid.mp4` asset if runtime issues return.
+- Preserve the six destinations and annual-member restrictions while adjusting card presentation.
 
 ## Open questions & assumptions
 
@@ -44,3 +50,4 @@
 - Confirm whether “expired applications” means expired membership applications, expired memberships, or both.
 - Confirm the desired lead time and timezone for blocked-date due-date reminders.
 - Verify the final admin booking fields available in the database and whether all fields shown in the admin view are present in email data.
+- The supplied reference photo remains the source of truth for finer card typography and spacing details not yet captured.
