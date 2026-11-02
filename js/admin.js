@@ -24,6 +24,11 @@ async function refreshDashboard() {
     loadAvailability(),
     loadMemberContent()
   ]);
+
+  const { error: reminderError } = await supabase.functions.invoke("admin-notifications", {
+    body: { type: "daily_reminder" }
+  });
+  if (reminderError) console.error("Daily notification failed:", reminderError.message);
 }
 
 logoutButton.addEventListener("click", async () => {

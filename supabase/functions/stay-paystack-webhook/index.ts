@@ -81,8 +81,14 @@ type BookingEmailRow = {
   guests: number;
   breakfast_included: boolean;
   total_ghs: number;
+  nightly_rate_ghs: number;
+  status: string;
+  source: string;
+  notes: string;
+  checked_in_at: string | null;
   guest_name: string;
   guest_email: string;
+  guest_phone: string;
   stay_rooms: { name: string } | null;
 };
 
@@ -106,15 +112,26 @@ function formatStayDate(isoDate: string) {
 function buildStayEmails(booking: BookingEmailRow): { guest: EmailMessage; admin: EmailMessage } {
   const roomName = booking.stay_rooms?.name ?? "";
   const amount = `GHS ${booking.total_ghs.toLocaleString("en-GB")}`;
+  const checkIn = new Date(`${booking.check_in}T00:00:00Z`);
+  const checkOut = new Date(`${booking.check_out}T00:00:00Z`);
+  const nights = Math.round((checkOut.getTime() - checkIn.getTime()) / 86400000);
   const rows: [string, string][] = [
     ["Booking reference", booking.booking_reference],
+    ["Status", booking.status === "confirmed" ? "Confirmed" : booking.status],
     ["Room", roomName],
     ["Check-in", formatStayDate(booking.check_in)],
     ["Check-out", formatStayDate(booking.check_out)],
+    ["Nights", String(nights)],
     ["Guests", String(booking.guests)],
-    ["Breakfast", booking.breakfast_included ? "Included" : "Not included"],
+    ["Rate", `${booking.breakfast_included ? "With breakfast" : "Room only"} (GHS ${booking.nightly_rate_ghs.toLocaleString("en-GB")} / night)`],
     ["Total", amount],
+    ["Payment source", booking.source === "manual" ? "Manual booking" : "Online booking (Paystack)"],
+    ["Guest name", booking.guest_name],
+    ["Email", booking.guest_email],
+    ["Phone", booking.guest_phone],
   ];
+  if (booking.checked_in_at) rows.push(["Checked in", booking.checked_in_at]);
+  if (booking.notes) rows.push(["Notes", booking.notes]);
   const rowsHtml = rows
     .map(([label, value]) => `<tr><td style="padding:10px 16px;color:#6B5E50;border-bottom:1px solid #E8DCC8">${escapeHtml(label)}</td><td style="padding:10px 16px;color:#2B2118;font-weight:600;border-bottom:1px solid #E8DCC8">${escapeHtml(value)}</td></tr>`)
     .join("");
@@ -168,7 +185,8 @@ function buildStayEmails(booking: BookingEmailRow): { guest: EmailMessage; admin
       text: guestText,
     },
     admin: {
-      to: [],
+      to: ["huangnehemiah10@gmail.com"],
+      cc: ["hiba@edan.studio"],
       subject: `New stay booking ${booking.booking_reference}`,
       html: adminHtml,
       text: adminText,
@@ -176,7 +194,7 @@ function buildStayEmails(booking: BookingEmailRow): { guest: EmailMessage; admin
   };
 }
 
-type EmailMessage = { to: string[]; subject: string; html: string; text: string };
+type EmailMessage = { to: string[]; cc?: string[]; subject: string; html: string; text: string };
 
 async function sendEmail(resendKey: string, email: EmailMessage) {
   const response = await fetch("https://api.resend.com/emails", {
@@ -191,23 +209,12 @@ async function sendEmail(resendKey: string, email: EmailMessage) {
       subject: email.subject,
       html: email.html,
       text: email.text,
+      cc: email.cc,
     }),
   });
   if (!response.ok) {
     throw new Error(`Sending the email failed (${response.status})`);
   }
-}
-
-async function adminEmails(admin: SupabaseClient): Promise<string[]> {
-  const { data: rows, error } = await admin.from("admins").select("user_id");
-  if (error) throw error;
-  const emails: string[] = [];
-  for (const row of rows ?? []) {
-    const { data, error: userError } = await admin.auth.admin.getUserById(row.user_id);
-    if (userError) throw userError;
-    if (data.user?.email) emails.push(data.user.email);
-  }
-  return emails;
 }
 
 async function sendConfirmationEmailsIfDue(admin: SupabaseClient, reference: string) {
@@ -237,10 +244,7 @@ async function sendConfirmationEmailsIfDue(admin: SupabaseClient, reference: str
   const emails = buildStayEmails(booking as unknown as BookingEmailRow);
   try {
     await sendEmail(resendKey, emails.guest);
-    const recipients = await adminEmails(admin);
-    if (recipients.length > 0) {
-      await sendEmail(resendKey, { ...emails.admin, to: recipients });
-    }
+    await sendEmail(resendKey, emails.admin);
   } catch (sendError) {
     await admin.from("stay_bookings").update({ confirmation_emailed_at: null }).eq("id", booking.id);
     throw sendError;

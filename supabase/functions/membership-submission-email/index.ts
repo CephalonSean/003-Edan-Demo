@@ -48,7 +48,7 @@ type Application = {
   submission_emailed_at: string | null;
 };
 
-type Email = { to: string[]; subject: string; html: string; text: string };
+type Email = { to: string[]; cc?: string[]; subject: string; html: string; text: string };
 
 async function userIdFromToken(supabaseUrl: string, serviceKey: string, accessToken: string): Promise<string | null> {
   const response = await fetch(`${supabaseUrl}/auth/v1/user`, {
@@ -110,28 +110,6 @@ async function setEmailedAt(
   return rows.length > 0;
 }
 
-async function adminEmails(supabaseUrl: string, serviceKey: string): Promise<string[]> {
-  const response = await fetch(`${supabaseUrl}/rest/v1/admins?select=user_id`, {
-    headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` },
-  });
-  if (!response.ok) {
-    throw new Error(`Loading the admins failed (${response.status})`);
-  }
-  const rows = (await response.json()) as { user_id: string }[];
-  const emails: string[] = [];
-  for (const row of rows) {
-    const userResponse = await fetch(`${supabaseUrl}/auth/v1/admin/users/${row.user_id}`, {
-      headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` },
-    });
-    if (!userResponse.ok) {
-      throw new Error(`Loading an admin account failed (${userResponse.status})`);
-    }
-    const user = (await userResponse.json()) as { email?: unknown };
-    if (typeof user.email === "string" && user.email) emails.push(user.email);
-  }
-  return emails;
-}
-
 function buildApplicantEmail(application: Application): Email {
   const name = application.full_name ?? "there";
   const subject = "We have received your Ɛdan membership application";
@@ -160,7 +138,7 @@ function buildApplicantEmail(application: Application): Email {
   return { to: [application.applicant_email], subject, html, text };
 }
 
-function buildAdminEmail(application: Application, to: string[]): Email {
+function buildAdminEmail(application: Application): Email {
   const practice = PRACTICE_LABELS[application.practice_type ?? ""] ?? application.practice_type ?? "";
   const basedIn = BASED_IN_LABELS[application.based_in ?? ""] ?? application.based_in ?? "";
   const rows: [string, string][] = [
@@ -197,7 +175,7 @@ function buildAdminEmail(application: Application, to: string[]): Email {
     </div>
   </div>
 </div>`;
-  return { to, subject, html, text };
+  return { to: ["huangnehemiah10@gmail.com"], cc: ["hiba@edan.studio"], subject, html, text };
 }
 
 async function sendEmail(email: Email) {
@@ -217,6 +195,7 @@ async function sendEmail(email: Email) {
       subject: email.subject,
       html: email.html,
       text: email.text,
+      cc: email.cc,
     }),
   });
   if (!response.ok) {
@@ -266,10 +245,7 @@ Deno.serve(async (req: Request) => {
 
     try {
       await sendEmail(buildApplicantEmail(application));
-      const admins = await adminEmails(supabaseUrl, serviceKey);
-      if (admins.length > 0) {
-        await sendEmail(buildAdminEmail(application, admins));
-      }
+      await sendEmail(buildAdminEmail(application));
     } catch (error) {
       await setEmailedAt(supabaseUrl, serviceKey, application.id, null, false);
       throw error;

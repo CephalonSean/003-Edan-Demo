@@ -307,8 +307,17 @@ function buildReminderEmail(digest: {
   };
   if (digest.expired_memberships.length > 0) {
     const mems = digest.expired_memberships as ExpiredM[];
+    const expiredRows: [string, string][] = [];
+    mems.forEach((member) => {
+      expiredRows.push(
+        ["Email", safe(member.member_email)],
+        ["Tier", safe(member.membership_tier)],
+        ["Status", "Expired"],
+        ["Expires", formatDate(member.expires_at)],
+      );
+    });
     sections.push(
-      `<p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#2B2118">Expired memberships (${mems.length})</p>${detailTable(mems.map((m) => ["Email", "Expiry", "Status", "Tier"].map((_, i) => [["Email", safe(m.member_email)], ["Tier", safe(m.membership_tier)], ["Status", "Expired"], ["Expires", formatDate(m.expires_at)]][i][1] as string) as [string, string]))}`,
+      `<p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#2B2118">Expired memberships (${mems.length})</p>${detailTable(expiredRows)}`,
     );
     textParts.push(`Expired memberships (${mems.length}):\n${mems.map((m) => `  - ${m.member_email} — expired ${formatDate(m.expires_at)}`).join("\n")}`);
   }
@@ -321,8 +330,17 @@ function buildReminderEmail(digest: {
   };
   if (digest.upcoming_block_ends.length > 0) {
     const blocks = digest.upcoming_block_ends as Block[];
+    const blockRows: [string, string][] = [];
+    blocks.forEach((block) => {
+      blockRows.push(
+        ["Room", safe(block.room_name)],
+        ["From", formatDate(block.starts_on)],
+        ["Until (first day free)", formatDate(block.ends_on)],
+        ["Reason", safe(block.reason)],
+      );
+    });
     sections.push(
-      `<p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#2B2118">Blocked dates ending soon (${blocks.length})</p>${detailTable(blocks.map((b) => [["Room", safe(b.room_name)], ["From", formatDate(b.starts_on)], ["Until (first day free)", formatDate(b.ends_on)], ["Reason", safe(b.reason)]]))}`,
+      `<p style="margin:0 0 12px;font-size:15px;font-weight:700;color:#2B2118">Blocked dates ending soon (${blocks.length})</p>${detailTable(blockRows)}`,
     );
     textParts.push(`Blocked dates ending soon (${blocks.length}):\n${blocks.map((b) => `  - ${b.room_name}: ${formatDate(b.starts_on)} to ${formatDate(b.ends_on)}`).join("\n")}`);
   }
