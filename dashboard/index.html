@@ -47,6 +47,11 @@
           <p class="admin__kpi-value">—</p>
           <p class="admin__kpi-note">Confirmed and completed stays</p>
         </article>
+        <article class="admin__kpi" data-kpi="appointments">
+          <p class="admin__kpi-label">Appointments</p>
+          <p class="admin__kpi-value">—</p>
+          <p class="admin__kpi-note">Upcoming requests and confirmed sessions</p>
+        </article>
         <p id="kpiError" class="admin__review-error admin__kpis-error" role="alert" hidden></p>
       </section>
 
@@ -123,6 +128,24 @@
               <tbody id="bookingsBody"></tbody>
             </table>
           </div>
+        </article>
+
+        <article id="appointments" class="admin__card admin__card--full" aria-labelledby="appointmentsHeading">
+          <div class="admin__section-head">
+            <div><span class="eyebrow">member appointments</span><h2 id="appointmentsHeading">Appointments</h2></div>
+          </div>
+          <form id="appointmentSlotForm" class="admin__inline-form">
+            <p class="admin__hint">Add a future time members can request. Times are shown in your local timezone.</p>
+            <div class="admin__inline-row">
+              <label class="admin__label">Starts<input id="appointmentSlotStart" class="admin__file" type="datetime-local" required></label>
+              <label class="admin__label">Ends<input id="appointmentSlotEnd" class="admin__file" type="datetime-local" required></label>
+              <button class="admin__button admin__button--solid" type="submit">Add available time</button>
+            </div>
+            <p id="appointmentSlotError" class="admin__review-error" role="alert" hidden></p>
+          </form>
+          <div class="admin__table-wrap"><table class="admin__table"><thead><tr><th>Reference</th><th>Member</th><th>Type</th><th>Time</th><th>Status</th><th><span class="visually-hidden">Actions</span></th></tr></thead><tbody id="appointmentsBody"></tbody></table></div>
+          <div class="admin__table-wrap"><table class="admin__table"><thead><tr><th>Available time</th><th>Slot status</th><th>Notes</th><th><span class="visually-hidden">Actions</span></th></tr></thead><tbody id="appointmentSlotsBody"></tbody></table></div>
+          <p id="appointmentsError" class="admin__review-error" role="alert" hidden></p>
         </article>
 
         <article class="admin__card admin__card--full" aria-labelledby="roomsHeading">

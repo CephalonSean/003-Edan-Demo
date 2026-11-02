@@ -1,6 +1,7 @@
 import { supabase } from "./supabase-client.js";
 import { loadMemberships } from "./admin-memberships.js";
 import { loadStayBookings } from "./admin-bookings.js";
+import { loadAppointments } from "./admin-appointments.js";
 import { loadAvailability } from "./admin-availability.js";
 import { loadMemberContent } from "./admin-members-content.js";
 import { loadKpis } from "./admin-kpis.js";
@@ -21,6 +22,7 @@ async function refreshDashboard() {
     loadKpis(),
     loadMemberships(),
     loadStayBookings(),
+    loadAppointments(),
     loadAvailability(),
     loadMemberContent()
   ]);

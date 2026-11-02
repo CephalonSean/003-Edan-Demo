@@ -475,18 +475,59 @@
 
     <!-- ANNUAL: APPOINTMENTS -->
     <section class="members__block members__gated members__block--annual members__block--appointments" id="appointments" aria-labelledby="appointmentsTitle">
-      <figure class="members__appointment-figure">
-        <img src="/images/door-window.jpg" alt="A timber door beside a window with leaves outside" loading="lazy">
-      </figure>
-      <div class="members__appointment-copy">
-        <span class="members__eyebrow">06 / Annual members</span>
-        <h2 id="appointmentsTitle">Make a little<br>time.</h2>
-        <p class="members__locked-text" data-annual-lock hidden>
-          One-to-one appointments are part of the annual membership.
-        </p>
+      <div class="members__appointment-page">
+        <header class="members__appointment-hero">
+          <img src="/images/our story people.jpg" alt="A thoughtful conversation at Ɛdan" loading="lazy">
+          <div class="members__appointment-hero-copy">
+            <span class="members__eyebrow">06 / Appointments</span>
+            <h2 id="appointmentsTitle">Let's make time.</h2>
+            <p>Book a conversation, consultation or working session with the Ɛdan team.</p>
+          </div>
+        </header>
+
+        <div data-annual-lock hidden class="members__appointment-locked">
+          <span class="members__eyebrow">Annual members</span>
+          <h3>One-to-one time is part of annual membership.</h3>
+          <p>Active annual members can choose a conversation and request an available time below.</p>
+        </div>
+
         <div data-annual-content>
-          <p>Ask for a one-to-one appointment and the Ɛdan team will be in touch to arrange a time.</p>
-          <a class="members__text-link" href="/contact/">Request an appointment <span aria-hidden="true">↗</span></a>
+          <section class="members__appointment-types" aria-labelledby="appointmentTypesTitle">
+            <div class="members__appointment-section-heading"><h3 id="appointmentTypesTitle">Appointment types</h3><span>Choose what feels useful</span></div>
+            <div class="members__appointment-type-grid" id="appointmentTypeList"><p class="members__appointment-status">Loading appointment types…</p></div>
+          </section>
+
+          <section class="members__appointment-booking" aria-labelledby="bookAppointmentTitle">
+            <div class="members__appointment-section-heading"><h3 id="bookAppointmentTitle">Book an appointment</h3><span>Request a time with the team</span></div>
+            <div class="members__appointment-steps" aria-label="Booking steps"><span class="is-active">01 Choose appointment</span><span>02 Choose date</span><span>03 Choose time</span><span>04 Your details</span><span>05 Confirm</span></div>
+            <form id="appointmentForm" class="members__appointment-form">
+              <div class="members__appointment-form-grid">
+                <label>Appointment type<select id="appointmentType" required><option value="">Choose an appointment</option></select></label>
+                <label>Date<select id="appointmentDate" required disabled><option value="">Choose a date</option></select></label>
+                <label>Time<select id="appointmentSlot" name="slot" required disabled><option value="">Choose a time</option></select></label>
+                <label>Your name<input id="appointmentName" type="text" maxlength="120" required></label>
+                <label>Email address<input id="appointmentEmail" type="email" maxlength="254" required></label>
+                <label>WhatsApp number<input id="appointmentWhatsapp" type="tel" maxlength="40" placeholder="Optional"></label>
+                <label class="members__appointment-note">What would you like to discuss?<textarea id="appointmentNote" rows="4" maxlength="2000" placeholder="Optional note"></textarea></label>
+              </div>
+              <div class="members__appointment-review" id="appointmentReview">Choose an appointment type, date and time to review your request.</div>
+              <p class="members__appointment-status" id="appointmentStatus" role="status" aria-live="polite"></p>
+              <button class="members__appointment-submit" id="appointmentSubmit" type="submit" disabled>Confirm booking request <span aria-hidden="true">→</span></button>
+            </form>
+          </section>
+
+          <section class="members__appointment-upcoming" aria-labelledby="upcomingAppointmentsTitle">
+            <div class="members__appointment-section-heading"><h3 id="upcomingAppointmentsTitle">Your upcoming appointments</h3><span>Private to your account</span></div>
+            <div id="appointmentList"><p class="members__appointment-status">Loading your appointments…</p></div>
+          </section>
+
+          <div class="members__appointment-confirmation" id="appointmentConfirmation" hidden>
+            <span class="members__eyebrow">Request received</span>
+            <h3>We've made room for this conversation.</h3>
+            <p>Your request is recorded. The Ɛdan team will confirm the time and send the details by email.</p>
+            <dl id="appointmentConfirmationDetails"></dl>
+            <a class="members__text-link" href="#aroundEdanTitle">Return to Members <span aria-hidden="true">↗</span></a>
+          </div>
         </div>
       </div>
     </section>
@@ -520,6 +561,7 @@
   <script src="/js/members.js"></script>
   <script src="/js/members-chat.js"></script>
   <script src="/js/members-content.js"></script>
+  <script src="/js/members-appointments.js"></script>
   <script src="/js/main.js"></script>
   <script src="/js/nav.js"></script>
   <script src="/js/include.js"></script>

@@ -1,7 +1,7 @@
 import { supabase } from "./supabase-client.js";
 import { setMessageText } from "./admin-table.js";
 
-const KPI_KEYS = ["active_members", "pending_review", "expired", "total_bookings"];
+const KPI_KEYS = ["active_members", "pending_review", "expired", "total_bookings", "appointments"];
 
 const kpiError = document.getElementById("kpiError");
 
