@@ -88,8 +88,6 @@ function openInterestForm(session, plan) {
   interestForm.reset();
   interestDialog.dataset.plan = plan;
   if (plan) interestForm.elements.plan.value = plan;
-  interestForm.elements.fullName.value = session.user.user_metadata?.full_name || "";
-  interestForm.elements.email.value = session.user.email || "";
   setMessage(interestMessage, "");
   statusLine.hidden = true;
   interestDialog.showModal();
@@ -113,6 +111,7 @@ async function handleInterestSubmit(event) {
   try {
     const { error } = await supabase.rpc("submit_membership_interest", {
       p_full_name: fields.fullName.value.trim(),
+      p_email: fields.email.value.trim(),
       p_phone: fields.phone.value.trim(),
       p_practice_type: fields.practiceType.value,
       p_based_in: fields.basedIn.value,

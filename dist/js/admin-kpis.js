@@ -1,7 +1,7 @@
 import { supabase } from "./supabase-client.js";
 import { setMessageText } from "./admin-table.js";
 
-const KPI_KEYS = ["active_members", "pending_review", "paid_awaiting_activation", "expired", "total_bookings"];
+const KPI_KEYS = ["active_members", "pending_review", "expired", "total_bookings"];
 
 const kpiError = document.getElementById("kpiError");
 
@@ -26,9 +26,5 @@ export async function loadKpis() {
   setMessageText(kpiError, "");
   KPI_KEYS.forEach(key => {
     setKpiValue(key, data[key].toLocaleString("en-GB"));
-    document.querySelector(`[data-kpi="${key}"]`).classList.toggle(
-      "admin__kpi--attention",
-      key === "paid_awaiting_activation" && data[key] > 0
-    );
   });
 }
