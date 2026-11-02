@@ -477,6 +477,8 @@
     <!-- ANNUAL: APPOINTMENTS -->
     <section class="members__block members__gated members__block--annual members__block--appointments" id="appointments" aria-labelledby="appointmentsTitle">
       <div class="members__appointment-page">
+
+        <!-- Hero -->
         <header class="members__appointment-hero">
           <img src="/images/our story people.jpg" alt="A thoughtful conversation at Ɛdan" loading="lazy">
           <div class="members__appointment-hero-copy">
@@ -486,6 +488,7 @@
           </div>
         </header>
 
+        <!-- Annual-only lock -->
         <div data-annual-lock hidden class="members__appointment-locked">
           <span class="members__eyebrow">Annual members</span>
           <h3>One-to-one time is part of annual membership.</h3>
@@ -493,43 +496,130 @@
         </div>
 
         <div data-annual-content>
-          <section class="members__appointment-types" aria-labelledby="appointmentTypesTitle">
-            <div class="members__appointment-section-heading"><h3 id="appointmentTypesTitle">Appointment types</h3><span>Choose what feels useful</span></div>
-            <div class="members__appointment-type-grid" id="appointmentTypeList"><p class="members__appointment-status">Loading appointment types…</p></div>
+
+          <!-- Appointment types -->
+          <section class="members__appt-types-section" aria-labelledby="appointmentTypesTitle">
+            <div class="members__appt-section-head">
+              <h3 id="appointmentTypesTitle">Appointment Types</h3>
+            </div>
+            <div class="members__appt-type-grid" id="appointmentTypeList">
+              <p class="members__appt-loading">Loading appointment types…</p>
+            </div>
           </section>
 
-          <section class="members__appointment-booking" aria-labelledby="bookAppointmentTitle">
-            <div class="members__appointment-section-heading"><h3 id="bookAppointmentTitle">Book an appointment</h3><span>Request a time with the team</span></div>
-            <div class="members__appointment-steps" aria-label="Booking steps"><span class="is-active">01 Choose appointment</span><span>02 Choose date</span><span>03 Choose time</span><span>04 Your details</span><span>05 Confirm</span></div>
-            <form id="appointmentForm" class="members__appointment-form">
-              <div class="members__appointment-form-grid">
-                <label>Appointment type<select id="appointmentType" required><option value="">Choose an appointment</option></select></label>
-                <label>Date<select id="appointmentDate" required disabled><option value="">Choose a date</option></select></label>
-                <label>Time<select id="appointmentSlot" name="slot" required disabled><option value="">Choose a time</option></select></label>
-                <label>Your name<input id="appointmentName" type="text" maxlength="120" required></label>
-                <label>Email address<input id="appointmentEmail" type="email" maxlength="254" required></label>
-                <label>WhatsApp number<input id="appointmentWhatsapp" type="tel" maxlength="40" placeholder="Optional"></label>
-                <label class="members__appointment-note">What would you like to discuss?<textarea id="appointmentNote" rows="4" maxlength="2000" placeholder="Optional note"></textarea></label>
-              </div>
-              <div class="members__appointment-review" id="appointmentReview">Choose an appointment type, date and time to review your request.</div>
-              <p class="members__appointment-status" id="appointmentStatus" role="status" aria-live="polite"></p>
-              <button class="members__appointment-submit" id="appointmentSubmit" type="submit" disabled>Confirm booking request <span aria-hidden="true">→</span></button>
-            </form>
+          <!-- Booking form -->
+          <section class="members__appt-booking-section" aria-labelledby="bookAppointmentTitle">
+            <div class="members__appt-section-head">
+              <h3 id="bookAppointmentTitle">Book an Appointment</h3>
+            </div>
+
+            <!-- Step progress -->
+            <div class="members__appt-steps" aria-label="Booking steps" id="apptStepBar">
+              <span class="members__appt-step is-active" data-step="1"><span class="members__appt-step-n">1</span><span class="members__appt-step-label">Choose appointment</span></span>
+              <span class="members__appt-step-line" aria-hidden="true"></span>
+              <span class="members__appt-step" data-step="2"><span class="members__appt-step-n">2</span><span class="members__appt-step-label">Choose date</span></span>
+              <span class="members__appt-step-line" aria-hidden="true"></span>
+              <span class="members__appt-step" data-step="3"><span class="members__appt-step-n">3</span><span class="members__appt-step-label">Choose time</span></span>
+              <span class="members__appt-step-line" aria-hidden="true"></span>
+              <span class="members__appt-step" data-step="4"><span class="members__appt-step-n">4</span><span class="members__appt-step-label">Your details</span></span>
+              <span class="members__appt-step-line" aria-hidden="true"></span>
+              <span class="members__appt-step" data-step="5"><span class="members__appt-step-n">5</span><span class="members__appt-step-label">Review &amp; confirm</span></span>
+            </div>
+
+            <!-- Two-column layout -->
+            <div class="members__appt-booking-body">
+              <form id="appointmentForm" class="members__appt-form" novalidate>
+                <fieldset class="members__appt-fieldset" id="apptStepType">
+                  <legend>Select an appointment type</legend>
+                  <div id="appointmentTypeList2" class="members__appt-radio-list"></div>
+                </fieldset>
+
+                <fieldset class="members__appt-fieldset" id="apptStepDate" hidden>
+                  <legend>Choose a date</legend>
+                  <select id="appointmentDate" required aria-label="Available dates">
+                    <option value="">Choose a date</option>
+                  </select>
+                </fieldset>
+
+                <fieldset class="members__appt-fieldset" id="apptStepTime" hidden>
+                  <legend>Choose a time</legend>
+                  <div id="appointmentSlotList" class="members__appt-slot-list"></div>
+                  <input type="hidden" id="appointmentSlot">
+                </fieldset>
+
+                <fieldset class="members__appt-fieldset" id="apptStepDetails" hidden>
+                  <legend>Your details</legend>
+                  <div class="members__appt-fields">
+                    <label>Your name <input id="appointmentName" type="text" maxlength="120" required autocomplete="name"></label>
+                    <label>Email address <input id="appointmentEmail" type="email" maxlength="254" required autocomplete="email"></label>
+                    <label>WhatsApp number <input id="appointmentWhatsapp" type="tel" maxlength="40" placeholder="Optional" autocomplete="tel"></label>
+                    <label class="members__appt-field--full">What would you like to discuss? <textarea id="appointmentNote" rows="4" maxlength="2000" placeholder="Optional — share anything helpful before we meet"></textarea></label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="members__appt-fieldset" id="apptStepReview" hidden>
+                  <legend>Review &amp; confirm</legend>
+                  <div class="members__appt-review" id="appointmentReview">Choose an appointment type, date and time to review your request.</div>
+                </fieldset>
+
+                <div class="members__appt-nav" id="apptNav">
+                  <button class="members__appt-btn--ghost" type="button" id="apptBack" hidden>← Back</button>
+                  <button class="members__appt-btn--next" type="button" id="apptNext">Continue →</button>
+                  <button class="members__appt-btn--submit" id="appointmentSubmit" type="submit" hidden disabled>Confirm booking request →</button>
+                </div>
+
+                <p class="members__appt-status" id="appointmentStatus" role="status" aria-live="polite"></p>
+              </form>
+
+              <aside class="members__appt-aside" aria-hidden="true">
+                <img src="/images/breeze-block-detail.webp" alt="">
+                <div class="members__appt-aside-copy">
+                  <p>Take your time.<br>We're here to help.</p>
+                </div>
+              </aside>
+            </div>
           </section>
 
-          <section class="members__appointment-upcoming" aria-labelledby="upcomingAppointmentsTitle">
-            <div class="members__appointment-section-heading"><h3 id="upcomingAppointmentsTitle">Your upcoming appointments</h3><span>Private to your account</span></div>
-            <div id="appointmentList"><p class="members__appointment-status">Loading your appointments…</p></div>
-          </section>
-
-          <div class="members__appointment-confirmation" id="appointmentConfirmation" hidden>
-            <span class="members__eyebrow">Request received</span>
-            <h3>We've made room for this conversation.</h3>
-            <p>Your request is recorded. The Ɛdan team will confirm the time and send the details by email.</p>
-            <dl id="appointmentConfirmationDetails"></dl>
-            <a class="members__text-link" href="#aroundEdanTitle">Return to Members <span aria-hidden="true">↗</span></a>
+          <!-- Confirmation -->
+          <div class="members__appt-confirmation" id="appointmentConfirmation" hidden>
+            <div class="members__appt-confirmation-inner">
+              <span class="members__eyebrow">Request received</span>
+              <h3>We've made room for this conversation.</h3>
+              <p>Your request is recorded. The Ɛdan team will confirm the time and send details by email.</p>
+              <dl id="appointmentConfirmationDetails"></dl>
+              <a class="members__appt-return" href="#aroundEdanTitle">Return to Members ↗</a>
+            </div>
           </div>
-        </div>
+
+          <!-- Upcoming appointments -->
+          <section class="members__appt-upcoming-section" aria-labelledby="upcomingAppointmentsTitle">
+            <div class="members__appt-upcoming-row">
+              <div class="members__appt-upcoming-block">
+                <div class="members__appt-section-head members__appt-section-head--no-border">
+                  <span class="members__appt-cal-icon" aria-hidden="true">▦</span>
+                  <h3 id="upcomingAppointmentsTitle">Your Upcoming Appointments</h3>
+                </div>
+                <div id="appointmentList">
+                  <div class="members__appt-empty">
+                    <span class="members__appt-empty-icon" aria-hidden="true">□</span>
+                    <strong>You have no upcoming appointments.</strong>
+                    <p>Book an appointment to get started.</p>
+                    <a class="members__appt-btn--sm" href="#bookAppointmentTitle">Book an appointment →</a>
+                  </div>
+                </div>
+              </div>
+              <aside class="members__appt-help">
+                <span class="members__appt-help-icon" aria-hidden="true">☊</span>
+                <div>
+                  <strong>Need Help?</strong>
+                  <p>Have a question or need to reschedule? Get in touch with the Ɛdan team.</p>
+                  <a class="members__appt-help-link" href="/contact/">Contact us →</a>
+                </div>
+              </aside>
+            </div>
+          </section>
+
+        </div><!-- /data-annual-content -->
       </div>
     </section>
 
