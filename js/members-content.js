@@ -411,7 +411,10 @@
       .order("created_at", { ascending: false });
 
     if (error) throw error;
-    showList(researchList, researchEmpty, data || [], renderResearch);
+    const items = data || [];
+    if (!items.length) return;
+    researchEmpty.hidden = true;
+    showList(researchList, researchEmpty, items, renderResearch);
   }
 
   async function init() {
