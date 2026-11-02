@@ -274,60 +274,134 @@
 /* ---------- Shortcuts index ---------- */
 
 .members__index {
-  padding: 0 var(--m-gutter) clamp(4rem, 8vw, 7rem);
+  padding: clamp(4rem, 8vw, 7rem) var(--m-gutter);
 }
 
-.members__index .members__eyebrow {
-  margin-bottom: 1rem;
+.members__index-intro {
+  display: grid;
+  gap: 1rem;
+  max-width: 900px;
+  margin-bottom: clamp(2rem, 4vw, 3.25rem);
 }
 
-.members__index ol {
+.members__index-intro h2 {
+  font-size: clamp(2.75rem, 6vw, 5rem);
+  letter-spacing: -0.055em;
+}
+
+.members__index-intro p {
+  max-width: 52ch;
+  color: var(--m-muted);
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
+  line-height: 1.5;
+}
+
+.members__index-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.7rem, 1.5vw, 1rem);
   margin: 0;
   padding: 0;
   list-style: none;
-  border-bottom: 1px solid var(--m-rule);
 }
 
-.members__index li {
-  border-top: 1px solid var(--m-rule);
-}
-
-.members__index a {
-  display: grid;
-  grid-template-columns: 3rem minmax(0, 1fr) auto;
-  align-items: baseline;
-  gap: 1rem;
-  padding: clamp(1rem, 2.5vw, 1.5rem) 0;
+.members__index-card {
+  position: relative;
+  display: block;
+  aspect-ratio: 1.45 / 1;
+  overflow: hidden;
+  border-radius: 0.65rem;
+  background: #5C5045;
+  color: var(--m-paper);
+  isolation: isolate;
   text-decoration: none;
-  transition: padding-left 0.3s ease, color 0.2s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.members__index a:hover {
-  padding-left: 0.75rem;
-  color: var(--m-clay);
+.members__index-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(24, 20, 16, 0.06) 22%, rgba(24, 20, 16, 0.82) 100%);
+}
+
+.members__index-card img {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.members__index-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(50, 45, 38, 0.18);
+}
+
+.members__index-card:hover img {
+  transform: scale(1.04);
+}
+
+.members__index-card:focus-visible {
+  outline: 2px solid var(--m-clay);
+  outline-offset: 4px;
 }
 
 .members__index-num {
-  color: var(--m-clay);
+  position: absolute;
+  top: 1.2rem;
+  left: 1.2rem;
+  color: #F8EBDD;
   font-family: var(--m-mono);
-  font-size: 0.75rem;
+  font-size: clamp(0.72rem, 1.2vw, 0.9rem);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
 }
 
-.members__index-name {
-  font-size: clamp(1.6rem, 4.5vw, 3.25rem);
+.members__index-card-copy {
+  position: absolute;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  left: 1.2rem;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.members__index-card-copy strong {
+  font-size: clamp(1.15rem, 2.2vw, 1.75rem);
   font-weight: 500;
   letter-spacing: -0.035em;
   line-height: 1.05;
 }
 
-.members__index-note {
-  color: var(--m-muted);
-  font-size: 0.875rem;
-  text-align: right;
+.members__index-card-copy span {
+  color: #F8EBDD;
+  font-size: clamp(0.78rem, 1.25vw, 0.95rem);
+  line-height: 1.35;
 }
 
-.members__index li.members__benefit--annual .members__index-note {
-  color: var(--m-clay);
+.members__index-arrow {
+  position: absolute;
+  right: 1.1rem;
+  bottom: 1.05rem;
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid rgba(248, 235, 221, 0.9);
+  border-radius: 50%;
+  color: #F8EBDD;
+  font-size: 1.05rem;
+  line-height: 1;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.members__index-card:hover .members__index-arrow {
+  background: #F8EBDD;
+  color: var(--m-ink);
+}
+
+.members__index-card-copy {
+  padding-right: 2.75rem;
 }
 
 /* ---------- Shared section blocks ---------- */
@@ -1044,6 +1118,10 @@
 /* ---------- Tablet: recompose, keep imagery prominent ---------- */
 
 @media (min-width: 768px) {
+  .members__index-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .members__membership {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
@@ -1095,6 +1173,10 @@
 /* ---------- Desktop: asymmetric editorial compositions ---------- */
 
 @media (min-width: 1024px) {
+  .members__index-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .members__membership {
     grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
     gap: clamp(4rem, 8vw, 9rem);
@@ -1136,13 +1218,21 @@
 /* ---------- Phones: keep headings readable, controls touch-friendly ---------- */
 
 @media (max-width: 560px) {
-  .members__index a {
-    grid-template-columns: 2.25rem minmax(0, 1fr);
+  .members__index-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
   }
 
-  .members__index-note {
-    grid-column: 2;
-    text-align: left;
+  .members__index-card {
+    aspect-ratio: 1.55 / 1;
+  }
+
+  .members__index-card-copy strong {
+    font-size: clamp(1.35rem, 6vw, 1.8rem);
+  }
+
+  .members__index-card-copy span {
+    font-size: 0.9rem;
   }
 
   .members__chat-form {
