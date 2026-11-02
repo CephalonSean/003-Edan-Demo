@@ -2342,6 +2342,19 @@
   font-size: 1.2rem;
 }
 
+.members__chat-conversations-toggle {
+  display: none;
+  min-height: 36px;
+  padding: 0 0.65rem;
+  border: 1px solid rgba(50, 45, 38, 0.16);
+  border-radius: 999px;
+  background: #F7EDD9;
+  color: var(--m-ink);
+  font: inherit;
+  font-size: 0.65rem;
+  cursor: pointer;
+}
+
 .members__chat-messages {
   gap: 1.1rem;
   padding: 1.35rem clamp(1rem, 3vw, 2rem);
@@ -2536,6 +2549,7 @@
   }
 
   .members__chat-panel {
+    position: relative;
     grid-template-columns: 1fr;
     height: calc(100svh - 4.5rem);
     min-height: 600px;
@@ -2547,6 +2561,26 @@
   .members__community-sidebar,
   .members__conversation-list {
     display: none;
+  }
+
+  .members__conversation-list.is-mobile-open {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    display: block;
+    padding: 0.85rem 0.7rem;
+    border: 0;
+    background: var(--m-paper);
+  }
+
+  .members__chat-header {
+    grid-template-columns: 2.65rem minmax(0, 1fr) auto auto;
+  }
+
+  .members__chat-conversations-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .members__chat-header {

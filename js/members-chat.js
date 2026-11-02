@@ -22,6 +22,8 @@
   const messageInput = byId("chatMessageInput");
   const sendButton = byId("chatSendButton");
   const emojiButton = byId("chatEmoji");
+  const conversationsToggle = byId("chatConversationsToggle");
+  const conversationList = byId("communityConversationList");
 
   if (!panel) return;
 
@@ -320,6 +322,16 @@
   });
 
   changeUsernameButton.addEventListener("click", showIdentity);
+
+  conversationsToggle?.addEventListener("click", () => {
+    const isOpen = conversationList.classList.toggle("is-mobile-open");
+    conversationsToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  conversationList?.addEventListener("click", () => {
+    conversationList.classList.remove("is-mobile-open");
+    conversationsToggle?.setAttribute("aria-expanded", "false");
+  });
 
   messageForm.addEventListener("submit", async (event) => {
     event.preventDefault();

@@ -212,7 +212,7 @@
           </div>
         </aside>
 
-        <aside class="members__conversation-list" aria-label="Recent conversations">
+        <aside class="members__conversation-list" id="communityConversationList" aria-label="Recent conversations">
           <div class="members__conversation-list-head"><span>Conversations</span><button type="button" aria-label="Start a new conversation">＋</button></div>
           <a class="members__conversation is-selected" href="#community">
             <img src="/images/comm.avif" alt="">
@@ -240,6 +240,7 @@
           <header class="members__chat-header">
             <img class="members__chat-avatar" src="/images/comm.avif" alt="">
             <div><h3>General Community</h3><p>A space for open discussion, ideas and connection.</p><span><i></i> 24 members · Online now</span></div>
+            <button class="members__chat-conversations-toggle" id="chatConversationsToggle" type="button" aria-expanded="false" aria-controls="communityConversationList">Conversations</button>
             <button class="members__chat-more" type="button" aria-label="More conversation options">⋮</button>
           </header>
 
