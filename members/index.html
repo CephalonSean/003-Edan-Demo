@@ -174,103 +174,108 @@
 
     <!-- COMMUNITY -->
     <section class="members__block members__gated members__block--community" id="community" aria-labelledby="communityTitle">
-      <div class="members__block-head">
-        <span class="members__eyebrow">01 / Community</span>
-        <h2 id="communityTitle">The conversation<br>starts here.</h2>
-        <p>A shared table for the people who make Ɛdan what it is.</p>
-      </div>
+      <h2 class="members__visually-hidden" id="communityTitle">Community</h2>
 
-      <section
-        class="members__chat-panel"
-        id="communityChatPanel"
-        aria-label="Ɛdan community chat"
-        hidden
-      >
-        <header class="members__chat-header">
-          <span class="members__chat-status-dot" aria-hidden="true"></span>
-          <div>
-            <h3>The Ɛdan table</h3>
-            <p>Share, ask and connect.</p>
+      <section class="members__chat-panel" id="communityChatPanel" aria-label="Ɛdan community chat" hidden>
+        <aside class="members__community-sidebar" aria-label="Community navigation">
+          <a class="members__community-back" href="#aroundEdanTitle">← Back to Members</a>
+          <div class="members__community-brand"><span>Ɛdan</span><span>Members</span></div>
+          <div class="members__community-heading">
+            <span class="members__eyebrow">Members</span>
+            <h3>Community</h3>
+            <p>Talk with the members</p>
           </div>
-        </header>
+          <label class="members__community-search">
+            <span aria-hidden="true">⌕</span>
+            <input type="search" placeholder="Search conversations…" aria-label="Search conversations">
+          </label>
+          <nav class="members__community-channels" aria-label="Community channels">
+            <a class="is-active" href="#community"><span>♧</span> All conversations <b>12</b></a>
+            <a href="#community"><span>◌</span> General <b>5</b></a>
+            <a href="#gather"><span>□</span> Events <b>2</b></a>
+            <a href="#in-process"><span>▱</span> Projects</a>
+            <a href="#research"><span>♧</span> Ideas <b>1</b></a>
+            <a href="#community"><span>♧</span> Introductions</a>
+          </nav>
+          <div class="members__community-profile">
+            <img src="/images/founder-carina.png" alt="">
+            <div><strong>Kwesi Mensah</strong><span><i></i> Online</span></div>
+            <button type="button" aria-label="Open profile settings">⚙</button>
+          </div>
+        </aside>
 
-        <div
-          class="members__chat-messages"
-          id="chatMessages"
-          role="log"
-          aria-live="polite"
-          aria-relevant="additions"
-          aria-label="Community messages"
-        >
-          <p class="members__chat-loading" id="chatLoading">
-            Making room at the table…
-          </p>
-        </div>
+        <aside class="members__conversation-list" aria-label="Recent conversations">
+          <div class="members__conversation-list-head"><span>Conversations</span><button type="button" aria-label="Start a new conversation">＋</button></div>
+          <a class="members__conversation is-selected" href="#community">
+            <img src="/images/comm.avif" alt="">
+            <span><strong>General Community</strong><small>Ama: Has anyone been looking into how public…</small></span><time>10:24 AM</time><b>5</b>
+          </a>
+          <a class="members__conversation" href="#community">
+            <img src="/images/garden.jpg" alt="">
+            <span><strong>Conversations Around the City</strong><small>Kojo: I’ve been documenting…</small></span><time>Yesterday</time><b>2</b>
+          </a>
+          <a class="members__conversation" href="#in-process">
+            <img src="/images/architectural sketch.png" alt="">
+            <span><strong>Studio Explorations</strong><small>Nana: Here are some sketches from the studio.</small></span><time>Mon</time>
+          </a>
+          <a class="members__conversation" href="#research">
+            <img src="/images/architectural_sketch2.png" alt="">
+            <span><strong>Material Research</strong><small>Kofi: These materials are incredible!</small></span><time>Sun</time>
+          </a>
+          <a class="members__conversation" href="#gather">
+            <img src="/images/sharing.webp" alt="">
+            <span><strong>Upcoming Gatherings</strong><small>Ama: Looking forward to next week’s event.</small></span><time>Sat</time>
+          </a>
+        </aside>
 
-        <p class="members__chat-notice" id="chatNotice" role="status"></p>
+        <main class="members__chat-main">
+          <header class="members__chat-header">
+            <img class="members__chat-avatar" src="/images/comm.avif" alt="">
+            <div><h3>General Community</h3><p>A space for open discussion, ideas and connection.</p><span><i></i> 24 members · Online now</span></div>
+            <button class="members__chat-more" type="button" aria-label="More conversation options">⋮</button>
+          </header>
 
-        <div class="members__chat-identity" id="chatIdentity" hidden>
-          <p class="members__chat-kicker">Before you join in</p>
-          <h4>What should we call you?</h4>
-          <p>Choose a username for your messages. You can change it later.</p>
-
-          <form id="chatUsernameForm" class="members__chat-username-form">
-            <label for="chatUsername">Your username</label>
-            <input
-              id="chatUsername"
-              name="username"
-              type="text"
-              minlength="3"
-              maxlength="24"
-              pattern="[A-Za-z0-9_]+"
-              autocomplete="nickname"
-              placeholder="e.g. gardenfriend"
-              required
-            >
-            <small>3–24 characters. Letters, numbers and underscores.</small>
-            <button type="submit" id="saveChatUsername">
-              Save username <span aria-hidden="true">↗</span>
-            </button>
-          </form>
-        </div>
-
-        <div class="members__chat-composer" id="chatComposer" hidden>
-          <div class="members__chat-composer-top">
-            <span id="chatCurrentUsername"></span>
-            <button type="button" id="changeChatUsername">
-              Change username
-            </button>
+          <div class="members__chat-messages" id="chatMessages" role="log" aria-live="polite" aria-relevant="additions" aria-label="Community messages">
+            <p class="members__chat-loading" id="chatLoading">Making room at the table…</p>
           </div>
 
-          <form id="chatMessageForm" class="members__chat-form">
-            <button
-              class="members__chat-emoji"
-              id="chatEmoji"
-              type="button"
-              aria-label="Add an emoji"
-              title="Add an emoji"
-            >☺</button>
+          <p class="members__chat-notice" id="chatNotice" role="status"></p>
 
-            <textarea
-              id="chatMessageInput"
-              name="message"
-              rows="1"
-              maxlength="1000"
-              placeholder="Share something with the table…"
-              aria-label="Write a message"
-              required
-            ></textarea>
+          <div class="members__chat-identity" id="chatIdentity" hidden>
+            <p class="members__chat-kicker">Before you join in</p>
+            <h4>What should we call you?</h4>
+            <p>Choose a username for your messages. You can change it later.</p>
+            <form id="chatUsernameForm" class="members__chat-username-form">
+              <label for="chatUsername">Your username</label>
+              <input id="chatUsername" name="username" type="text" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" autocomplete="nickname" placeholder="e.g. gardenfriend" required>
+              <small>3–24 characters. Letters, numbers and underscores.</small>
+              <button type="submit" id="saveChatUsername">Save username <span aria-hidden="true">↗</span></button>
+            </form>
+          </div>
 
-            <button
-              class="members__chat-send"
-              id="chatSendButton"
-              type="submit"
-              aria-label="Send message"
-            >↗</button>
-          </form>
+          <div class="members__chat-composer" id="chatComposer" hidden>
+            <div class="members__chat-composer-top"><span id="chatCurrentUsername"></span><button type="button" id="changeChatUsername">Change username</button></div>
+            <form id="chatMessageForm" class="members__chat-form">
+              <button class="members__chat-attach" type="button" aria-label="Attach a file">⌕</button>
+              <textarea id="chatMessageInput" name="message" rows="1" maxlength="1000" placeholder="Write a message…" aria-label="Write a message" required></textarea>
+              <button class="members__chat-emoji" id="chatEmoji" type="button" aria-label="Add an emoji" title="Add an emoji">☺</button>
+              <button class="members__chat-send" id="chatSendButton" type="submit" aria-label="Send message">↗</button>
+            </form>
+            <p class="members__chat-footnote">Be kind. Leave room for everyone.</p>
+          </div>
+        </main>
 
-          <p class="members__chat-footnote">Be kind. Leave room for everyone.</p>
-        </div>
+        <aside class="members__conversation-details" aria-label="Conversation details">
+          <h3>Conversation details</h3>
+          <p>A space for open discussion, ideas and connection.</p>
+          <h4>Members (24)</h4>
+          <div class="members__detail-avatars">
+            <img src="/images/founder-carina.png" alt=""><img src="/images/ceo.avif" alt=""><img src="/images/Hiba.JPEG" alt=""><img src="/images/comm.avif" alt=""><span>+19</span>
+          </div>
+          <h4>Shared files</h4>
+          <div class="members__shared-files"><img src="/images/garden.jpg" alt="Shared community image"><img src="/images/architectural sketch.png" alt="Shared sketch"></div>
+          <a href="#community">View all →</a>
+        </aside>
       </section>
     </section>
 
