@@ -172,7 +172,9 @@
       });
       figure.append(video);
     } else {
-      figure.append(element("div", "members__video-placeholder", "Video coming soon"));
+      const placeholder = element("div", "members__video-placeholder", "Video coming soon");
+      placeholder.dataset.videoPath = "/videos/replace-with-bonus-content-video.mp4";
+      figure.append(placeholder);
     }
 
     figure.append(element("h3", "", item.title));
