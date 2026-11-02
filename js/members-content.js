@@ -12,6 +12,16 @@
 
   const gatheringList = document.getElementById("gatheringList");
   const gatheringEmpty = document.getElementById("gatheringEmpty");
+  const gatherFeatured = document.getElementById("gatherFeatured");
+  const featuredGatherMedia = document.getElementById("featuredGatherMedia");
+  const featuredGatherCategory = document.getElementById("featuredGatherCategory");
+  const featuredGatherTitle = document.getElementById("featuredGatherTitle");
+  const featuredGatherDescription = document.getElementById("featuredGatherDescription");
+  const featuredGatherDate = document.getElementById("featuredGatherDate");
+  const featuredGatherLocation = document.getElementById("featuredGatherLocation");
+  const featuredGatherLink = document.getElementById("featuredGatherLink");
+  const gatherArchive = document.getElementById("gatherArchive");
+  const gatherMoments = document.getElementById("gatherMoments");
   const videoList = document.getElementById("bonusVideoList");
   const videoEmpty = document.getElementById("bonusVideoEmpty");
   const researchList = document.getElementById("researchList");
@@ -44,6 +54,11 @@
     hour: "numeric",
     minute: "2-digit"
   });
+  const gatherDateFormat = new Intl.DateTimeFormat(undefined, {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  });
 
   function element(tag, className, text) {
     const node = document.createElement(tag);
@@ -60,50 +75,86 @@
     }
   }
 
-  function renderGathering(item) {
-    const card = element("article", "members__gathering");
-    const copy = element("div", "members__gathering-copy");
+  function gatherImage(item, className = "") {
+    if (!item.image_path) return null;
+    const image = element("img", className, item.title);
+    image.src = item.image_path;
+    image.alt = item.title;
+    image.loading = "lazy";
+    return image;
+  }
 
-    if (item.starts_at) {
-      const date = element("time", "members__gathering-date", dateFormat.format(new Date(item.starts_at)));
-      date.dateTime = item.starts_at;
-      copy.append(date);
-    }
+  function gatherDate(item) {
+    if (!item.starts_at) return "Coming soon";
+    return gatherDateFormat.format(new Date(item.starts_at));
+  }
 
-    copy.append(element("h3", "", item.title));
-    copy.append(element("p", "members__gathering-eligibility", "For monthly and annual members"));
+  function gatherMeta(item) {
+    const meta = element("div", "members__gather-meta");
+    meta.append(element("span", "", `▦ ${gatherDate(item)}`));
+    if (item.location) meta.append(element("span", "", `⌖ ${item.location}`));
+    return meta;
+  }
 
-    if (item.location) {
-      copy.append(element("p", "members__gathering-location", item.location));
-    }
-
-    if (item.description) {
-      const details = element("details", "members__gathering-details");
-      details.append(
-        element("summary", "", "View details"),
-        element("p", "", item.description)
-      );
-      copy.append(details);
-    }
-
-    if (item.registration_url && isWebUrl(item.registration_url)) {
-      const link = element("a", "members__action", "Register ↗");
-      link.href = item.registration_url;
+  function gatherLink(item) {
+    const link = element("a", "members__gather-link", "Event details");
+    const external = Boolean(item.registration_url && isWebUrl(item.registration_url));
+    link.href = external ? item.registration_url : "#gather";
+    link.append(element("span", "", "→"));
+    if (external) {
       link.target = "_blank";
       link.rel = "noopener noreferrer";
-      copy.append(link);
     }
+    return link;
+  }
 
-    if (item.image_path) {
-      const image = element("img");
-      image.src = item.image_path;
-      image.alt = "";
-      image.loading = "lazy";
-      card.append(image);
-    }
-
+  function renderGathering(item) {
+    const card = element("article", "members__gather-card");
+    const image = gatherImage(item);
+    if (image) card.append(image);
+    const copy = element("div", "members__gather-card-copy");
+    copy.append(element("span", "members__gather-category", item.category || "Gathering"));
+    copy.append(element("h4", "", item.title));
+    if (item.description) copy.append(element("p", "", item.description));
+    copy.append(gatherMeta(item), gatherLink(item));
     card.append(copy);
     return card;
+  }
+
+  function renderArchiveItem(item) {
+    const article = element("article", "members__gather-archive-item");
+    const image = gatherImage(item);
+    if (image) article.append(image);
+    const copy = element("div", "members__gather-archive-copy");
+    copy.append(element("h4", "", item.title));
+    copy.append(element("span", "", item.caption || gatherDate(item)));
+    article.append(copy);
+    return article;
+  }
+
+  function renderMoment(item) {
+    const figure = element("figure", "members__gather-moment");
+    const image = gatherImage(item);
+    if (image) figure.append(image);
+    if (item.caption) figure.append(element("figcaption", "", item.caption));
+    return figure;
+  }
+
+  function renderFeaturedGathering(item) {
+    gatherFeatured.hidden = false;
+    featuredGatherMedia.replaceChildren();
+    const image = gatherImage(item);
+    if (image) featuredGatherMedia.append(image);
+    featuredGatherCategory.textContent = item.category || "Featured gathering";
+    featuredGatherTitle.textContent = item.title;
+    featuredGatherDescription.textContent = item.description || "";
+    featuredGatherDate.textContent = `▦ ${gatherDate(item)}`;
+    featuredGatherLocation.textContent = item.location ? `⌖ ${item.location}` : "";
+    const link = gatherLink(item);
+    featuredGatherLink.href = link.href;
+    featuredGatherLink.target = link.target;
+    featuredGatherLink.rel = link.rel;
+    featuredGatherLink.textContent = "Event details →";
   }
 
   function renderVideo(item) {
@@ -142,12 +193,25 @@
   async function loadGatherings(client) {
     const { data, error } = await client
       .from("member_gatherings")
-      .select("id, title, description, starts_at, location, image_path, registration_url")
+      .select("id, title, description, starts_at, location, image_path, registration_url, category, gathering_type, is_featured, caption")
       .order("sort_order", { ascending: true })
       .order("starts_at", { ascending: true, nullsFirst: false });
 
     if (error) throw error;
-    showList(gatheringList, gatheringEmpty, data || [], renderGathering);
+
+    const items = data || [];
+    const featured = items.find(item => item.is_featured) || items.find(item => item.gathering_type === "upcoming") || items[0];
+    const upcoming = items.filter(item => item.gathering_type === "upcoming" && item.id !== featured?.id);
+    const archive = items.filter(item => item.gathering_type === "past");
+    const moments = items.filter(item => item.gathering_type === "moment");
+
+    if (!items.length) return;
+
+    gatheringEmpty.hidden = true;
+    if (featured) renderFeaturedGathering(featured);
+    gatheringList.replaceChildren(...upcoming.map(renderGathering));
+    gatherArchive.replaceChildren(...archive.map(renderArchiveItem));
+    gatherMoments.replaceChildren(...moments.map(renderMoment));
   }
 
   async function loadBonusVideos(client) {
@@ -330,7 +394,9 @@
     const videos = items.filter(item => item.content_type === "video");
     const featured = projects.find(item => item.is_featured) || projects[0];
 
-    processEmpty.hidden = items.length > 0;
+    if (!items.length) return;
+
+    processEmpty.hidden = true;
     if (featured) renderFeatured(featured);
     processProjectList.replaceChildren(...projects.filter(item => item.id !== featured?.id).map(renderProject));
     processUpdateList.replaceChildren(...updates.map(renderUpdate));

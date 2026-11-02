@@ -1170,7 +1170,11 @@ CREATE TABLE IF NOT EXISTS member_gatherings (
   registration_url text NOT NULL DEFAULT '',
   is_published boolean NOT NULL DEFAULT false,
   sort_order integer NOT NULL DEFAULT 0,
-  created_at timestamptz NOT NULL DEFAULT now()
+  created_at timestamptz NOT NULL DEFAULT now(),
+  category text NOT NULL DEFAULT '',
+  gathering_type text NOT NULL DEFAULT 'upcoming' CHECK (gathering_type IN ('upcoming', 'past', 'moment')),
+  is_featured boolean NOT NULL DEFAULT false,
+  caption text NOT NULL DEFAULT ''
 );
 
 ALTER TABLE member_gatherings ENABLE ROW LEVEL SECURITY;

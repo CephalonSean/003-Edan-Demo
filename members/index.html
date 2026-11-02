@@ -291,32 +291,40 @@
           </div>
         </header>
 
-        <p class="members__empty" id="processEmpty">No work in progress has been shared yet.</p>
+        <p class="members__empty" id="processEmpty" hidden>No work in progress has been shared yet.</p>
 
-        <section class="members__process-featured" id="processFeatured" aria-labelledby="featuredProcessTitle" hidden>
-          <div class="members__process-featured-media" id="featuredProcessMedia"></div>
+        <section class="members__process-featured" id="processFeatured" aria-labelledby="featuredProcessTitle">
+          <div class="members__process-featured-media" id="featuredProcessMedia"><img src="/images/breeze-block-detail.webp" alt="A courtyard study in progress"></div>
           <div class="members__process-featured-copy">
-            <span class="members__process-category" id="featuredProcessCategory"></span>
-            <h3 id="featuredProcessTitle"></h3>
-            <p id="featuredProcessSummary"></p>
-            <div class="members__process-meta"><span id="featuredProcessUpdated"></span><span id="featuredProcessProgress"></span></div>
+            <span class="members__process-category" id="featuredProcessCategory">Spatial research</span>
+            <h3 id="featuredProcessTitle">The Osu Courtyard Project</h3>
+            <p id="featuredProcessSummary">Exploring the social life of space in Accra's historic neighbourhood.</p>
+            <div class="members__process-meta"><span id="featuredProcessUpdated">Updated: Apr 2025</span><span id="featuredProcessProgress">60% complete</span></div>
             <a class="members__process-link" id="featuredProcessLink" href="#in-process">View project <span aria-hidden="true">→</span></a>
           </div>
         </section>
 
         <section class="members__process-section" aria-labelledby="ongoingProcessTitle">
           <div class="members__process-section-heading"><h3 id="ongoingProcessTitle">Ongoing projects</h3><span>From the studio <span aria-hidden="true">→</span></span></div>
-          <div class="members__process-project-grid" id="processProjectList"></div>
+          <div class="members__process-project-grid" id="processProjectList">
+            <article class="members__process-project"><img src="/images/breeze-block-terracotta.jpg" alt="Hands working with clay"><div class="members__process-project-copy"><span class="members__process-category">Material studies</span><h4>Clay in the City</h4><p>Exploring local materials for contemporary use.</p><div class="members__process-meta"><span>Mar 2025</span><span>In progress</span></div></div></article>
+            <article class="members__process-project"><img src="/images/architectural_sketch2.png" alt="Spatial sketches on paper"><div class="members__process-project-copy"><span class="members__process-category">Research</span><h4>Spatial Experiments</h4><p>Testing spatial ideas through low-cost models.</p><div class="members__process-meta"><span>Apr 2025</span><span>In progress</span></div></div></article>
+            <article class="members__process-project"><img src="/images/accra-map.png" alt="An urban map of Accra"><div class="members__process-project-copy"><span class="members__process-category">Urban studies</span><h4>Notes from the City</h4><p>Observations and insights from Accra.</p><div class="members__process-meta"><span>Mar 2025</span><span>Ongoing</span></div></div></article>
+            <article class="members__process-project"><img src="/images/model-guesthouse.jpg" alt="An architectural model"><div class="members__process-project-copy"><span class="members__process-category">Design exploration</span><h4>Studio Explorations</h4><p>Prototyping new spatial possibilities.</p><div class="members__process-meta"><span>Apr 2025</span><span>In progress</span></div></div></article>
+          </div>
         </section>
 
         <div class="members__process-lower-grid">
           <section class="members__process-section members__process-updates" aria-labelledby="processUpdatesTitle">
             <div class="members__process-section-heading"><h3 id="processUpdatesTitle">Project updates</h3><span>Studio journal</span></div>
-            <div class="members__process-update-list" id="processUpdateList"></div>
+            <div class="members__process-update-list" id="processUpdateList">
+              <article class="members__process-update"><img src="/images/sharing.webp" alt="Members visiting a studio"><div class="members__process-update-copy"><span class="members__process-category">Studio update</span><h4>Studio visit: Accra Urban Lab</h4><p>A recent visit sparked new ideas for our ongoing work.</p><div class="members__process-meta"><span>Apr 10, 2025</span></div></div></article>
+              <article class="members__process-update"><img src="/images/architectural sketch.png" alt="Material tests and drawings"><div class="members__process-update-copy"><span class="members__process-category">Studio update</span><h4>Material tests underway</h4><p>We are testing local materials for the next phase of our research.</p><div class="members__process-meta"><span>Mar 28, 2025</span></div></div></article>
+            </div>
           </section>
           <section class="members__process-section members__process-video-section" aria-labelledby="processVideoTitle">
             <div class="members__process-section-heading"><h3 id="processVideoTitle">Featured video</h3><span>Research in motion</span></div>
-            <div id="processVideoList"></div>
+            <div id="processVideoList"><article class="members__process-video"><div class="members__process-video-media"><img src="/images/garden.jpg" alt="The Ɛdan courtyard"><span class="members__process-play">▶</span><span class="members__process-duration">12:34</span></div><div class="members__process-video-copy"><h4>Research in Practice</h4><p>A look inside our studio and ongoing research at Ɛdan.</p></div></article></div>
           </section>
         </div>
       </div>
@@ -324,15 +332,57 @@
 
     <!-- GATHER -->
     <section class="members__block members__gated members__block--gather" id="gather" aria-labelledby="gatherTitle">
-      <div class="members__block-head">
-        <span class="members__eyebrow">03 / Gather</span>
-        <h2 id="gatherTitle">See you<br>around the table.</h2>
-        <p>Socials, workshops and member gatherings, in one place.</p>
+      <div class="members__gather-page">
+        <header class="members__gather-hero">
+          <img src="/images/garden-eat.jpg" alt="Members gathered outside at Ɛdan" loading="lazy">
+          <div class="members__gather-hero-copy">
+            <span class="members__eyebrow">03 / Gather</span>
+            <h2 id="gatherTitle">Come together.</h2>
+            <p>A space for conversations, shared experiences and moments that bring our community together.</p>
+          </div>
+        </header>
+
+        <p class="members__empty" id="gatheringEmpty" hidden>No gatherings have been published yet.</p>
+
+        <section class="members__gather-featured" id="gatherFeatured" aria-labelledby="featuredGatherTitle">
+          <div class="members__gather-featured-media" id="featuredGatherMedia"><img src="/images/garden-eat.jpg" alt="Members gathered outside at Ɛdan"></div>
+          <div class="members__gather-featured-copy">
+            <span class="members__gather-category" id="featuredGatherCategory">Featured gathering</span>
+            <h3 id="featuredGatherTitle">Conversations Around the City</h3>
+            <p id="featuredGatherDescription">A dialogue on urban life, creativity and belonging in Accra.</p>
+            <div class="members__gather-meta"><span id="featuredGatherDate">▦ Coming soon</span><span id="featuredGatherLocation">⌖ Ɛdan, Osu</span></div>
+            <a class="members__gather-link" id="featuredGatherLink" href="#gather">Event details <span aria-hidden="true">→</span></a>
+          </div>
+        </section>
+
+        <section class="members__gather-section" aria-labelledby="upcomingGatherTitle">
+          <div class="members__gather-section-heading"><h3 id="upcomingGatherTitle">Upcoming gatherings</h3><span>View all →</span></div>
+          <div class="members__gather-upcoming" id="gatheringList" aria-live="polite">
+            <article class="members__gather-card"><img src="/images/breeze-block-terracotta.jpg" alt="Hands working with materials"><div class="members__gather-card-copy"><span class="members__gather-category">Workshop</span><h4>Material Encounters</h4><p>Explore materials, techniques and possibilities.</p><div class="members__gather-meta"><span>▦ Coming soon</span><span>⌖ Ɛdan, Osu</span></div><a class="members__gather-link" href="#gather">Event details <span aria-hidden="true">→</span></a></div></article>
+            <article class="members__gather-card"><img src="/images/sharing.webp" alt="People gathered around a shared table"><div class="members__gather-card-copy"><span class="members__gather-category">Talk</span><h4>Shared Tables</h4><p>Food, ideas and community around one long table.</p><div class="members__gather-meta"><span>▦ Coming soon</span><span>⌖ Ɛdan, Osu</span></div><a class="members__gather-link" href="#gather">Event details <span aria-hidden="true">→</span></a></div></article>
+            <article class="members__gather-card"><img src="/images/garden.jpg" alt="A creative gathering in the courtyard"><div class="members__gather-card-copy"><span class="members__gather-category">Gathering</span><h4>Creative Research Gatherings</h4><p>A community forum for creative researchers and practitioners.</p><div class="members__gather-meta"><span>▦ Coming soon</span><span>⌖ Ɛdan, Osu</span></div><a class="members__gather-link" href="#gather">Event details <span aria-hidden="true">→</span></a></div></article>
+          </div>
+        </section>
+
+        <div class="members__gather-lower-grid">
+          <section class="members__gather-section" aria-labelledby="pastGatherTitle">
+            <div class="members__gather-section-heading"><h3 id="pastGatherTitle">Past gatherings</h3><span>View archive →</span></div>
+            <div class="members__gather-archive" id="gatherArchive">
+              <article class="members__gather-archive-item"><img src="/images/our story people.jpg" alt="Members in conversation"><div class="members__gather-archive-copy"><h4>Open Studio Sessions</h4><span>A day of shared practice and conversation.</span></div></article>
+              <article class="members__gather-archive-item"><img src="/images/eat-hero.jpg" alt="A shared meal at Ɛdan"><div class="members__gather-archive-copy"><h4>A Table for Many Voices</h4><span>An evening of food, stories and new connections.</span></div></article>
+              <article class="members__gather-archive-item"><img src="/images/dye-pits.jpg" alt="Hands working with natural colour"><div class="members__gather-archive-copy"><h4>Making Together</h4><span>Hands, materials, and a few hours in the studio.</span></div></article>
+            </div>
+          </section>
+          <section class="members__gather-section" aria-labelledby="gatherMomentsTitle">
+            <div class="members__gather-section-heading"><h3 id="gatherMomentsTitle">Community moments</h3><span>At Ɛdan</span></div>
+            <div class="members__gather-moments" id="gatherMoments">
+              <figure class="members__gather-moment"><img src="/images/architectural sketch.png" alt="Ideas taking shape"><figcaption>Ideas taking shape.</figcaption></figure>
+              <figure class="members__gather-moment"><img src="/images/sharing.webp" alt="A slower afternoon at Ɛdan"><figcaption>A slower afternoon at Ɛdan.</figcaption></figure>
+              <figure class="members__gather-moment"><img src="/images/garden-eat.jpg" alt="The courtyard in conversation"><figcaption>The courtyard in conversation.</figcaption></figure>
+            </div>
+          </section>
+        </div>
       </div>
-      <div class="members__gatherings" id="gatheringList" aria-live="polite">
-        <p class="members__empty" id="gatheringEmpty">No gatherings have been published yet.</p>
-      </div>
-      <a class="members__text-link members__view-all" href="/gather/">View all events <span aria-hidden="true">↗</span></a>
     </section>
 
     <!-- RESEARCH -->

@@ -12,11 +12,15 @@ const CONTENT_TYPES = {
     singular: "gathering",
     fields: [
       { name: "title", label: "Title", type: "text", required: true, maxLength: 160 },
+      { name: "gathering_type", label: "Gather page area", type: "select", options: [["upcoming", "Upcoming gathering"], ["past", "Past gathering"], ["moment", "Community moment"]] },
+      { name: "category", label: "Category", type: "text", maxLength: 80 },
       { name: "starts_at", label: "Date and time", type: "datetime-local" },
       { name: "location", label: "Location", type: "text", maxLength: 160 },
       { name: "description", label: "Description", type: "textarea", maxLength: 2000 },
+      { name: "caption", label: "Archive or moment caption", type: "text", maxLength: 240 },
       { name: "image_path", label: "Photo", type: "image" },
-      { name: "registration_url", label: "Registration link (https://)", type: "url" },
+      { name: "registration_url", label: "Event details link (https://)", type: "url" },
+      { name: "is_featured", label: "Use as featured gathering", type: "checkbox" },
       { name: "sort_order", label: "Display order (lower first)", type: "number" }
     ]
   },
@@ -87,7 +91,7 @@ function selectedType() {
 function renderItemRow(item) {
   const row = createRow([
     item.title,
-    item.content_type || "—",
+    item.content_type || item.gathering_type || "—",
     item.is_published ? "Published" : "Draft",
     String(item.sort_order)
   ], ["Title", "Format", "Status", "Order"]);
@@ -114,7 +118,7 @@ export async function loadMemberContent() {
 
   const { data, error } = await supabase
     .from(config.table)
-    .select(config.table === "member_process_items" ? "id, title, content_type, is_published, sort_order" : "id, title, is_published, sort_order")
+    .select(config.table === "member_process_items" ? "id, title, content_type, is_published, sort_order" : config.table === "member_gatherings" ? "id, title, gathering_type, is_published, sort_order" : "id, title, is_published, sort_order")
     .order("sort_order")
     .order("created_at", { ascending: false })
     .limit(ITEM_LIMIT);
