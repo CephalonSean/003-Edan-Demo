@@ -38,10 +38,19 @@ const CONTENT_TYPES = {
     singular: "in-process item",
     fields: [
       { name: "title", label: "Title", type: "text", required: true, maxLength: 160 },
+      { name: "content_type", label: "In Process format", type: "select", options: [["project", "Project"], ["update", "Project update"], ["video", "Featured video"]] },
       { name: "category", label: "Category", type: "text", maxLength: 80 },
-      { name: "summary", label: "Summary", type: "textarea", maxLength: 500 },
+      { name: "summary", label: "Short description", type: "textarea", maxLength: 500 },
       { name: "body", label: "Full text (blank lines start new paragraphs)", type: "textarea", maxLength: 20000 },
-      { name: "image_path", label: "Photo", type: "image" },
+      { name: "image_path", label: "Main photo", type: "image" },
+      { name: "poster_path", label: "Video thumbnail", type: "image" },
+      { name: "updated_label", label: "Date or update label", type: "text", maxLength: 80 },
+      { name: "progress_label", label: "Progress label", type: "text", maxLength: 80 },
+      { name: "duration_label", label: "Video duration", type: "text", maxLength: 40 },
+      { name: "video_path", label: "Video file path", type: "text", maxLength: 300 },
+      { name: "link_url", label: "Project link (https:// or #anchor)", type: "text", maxLength: 300 },
+      { name: "link_label", label: "Project link label", type: "text", maxLength: 80 },
+      { name: "is_featured", label: "Use as featured project", type: "checkbox" },
       { name: "sort_order", label: "Display order (lower first)", type: "number" }
     ]
   },
@@ -78,9 +87,10 @@ function selectedType() {
 function renderItemRow(item) {
   const row = createRow([
     item.title,
+    item.content_type || "—",
     item.is_published ? "Published" : "Draft",
     String(item.sort_order)
-  ], ["Title", "Status", "Order"]);
+  ], ["Title", "Format", "Status", "Order"]);
 
   const editButton = createTableButton("Edit", "admin__button admin__button--small", { editId: item.id });
   const toggleButton = createTableButton(
@@ -104,19 +114,19 @@ export async function loadMemberContent() {
 
   const { data, error } = await supabase
     .from(config.table)
-    .select("id, title, is_published, sort_order")
+    .select(config.table === "member_process_items" ? "id, title, content_type, is_published, sort_order" : "id, title, is_published, sort_order")
     .order("sort_order")
     .order("created_at", { ascending: false })
     .limit(ITEM_LIMIT);
 
   if (error) {
     setMessageText(contentError, `Entries could not be loaded: ${error.message}`);
-    renderEmptyRow(contentBody, 4, "Entries could not be loaded.");
+    renderEmptyRow(contentBody, 5, "Entries could not be loaded.");
     return;
   }
 
   if (!data.length) {
-    renderEmptyRow(contentBody, 4, "No entries yet.");
+    renderEmptyRow(contentBody, 5, "No entries yet.");
     return;
   }
 
@@ -132,6 +142,7 @@ function toDateTimeLocal(isoValue) {
 function fieldValue(field, item) {
   const value = item?.[field.name];
   if (field.type === "datetime-local") return value ? toDateTimeLocal(value) : "";
+  if (field.type === "checkbox") return Boolean(value);
   if (value == null) return field.type === "number" ? "0" : "";
   return String(value);
 }
@@ -183,20 +194,31 @@ function renderFields(config, item) {
     }
 
     label.htmlFor = `content-${field.name}`;
-    const input = field.type === "textarea" ? document.createElement("textarea") : document.createElement("input");
+    const input = field.type === "textarea" ? document.createElement("textarea") : field.type === "select" ? document.createElement("select") : document.createElement("input");
     input.id = `content-${field.name}`;
     input.name = field.name;
     input.className = "admin__file";
 
     if (field.type === "textarea") {
       input.rows = 4;
+    } else if (field.type === "select") {
+      field.options.forEach(([optionValue, optionLabel]) => {
+        const option = document.createElement("option");
+        option.value = optionValue;
+        option.textContent = optionLabel;
+        input.append(option);
+      });
     } else {
       input.type = field.type;
     }
 
     input.required = Boolean(field.required);
     if (field.maxLength) input.maxLength = field.maxLength;
-    input.value = value;
+    if (field.type === "checkbox") {
+      input.checked = Boolean(value);
+    } else {
+      input.value = value;
+    }
 
     return [label, input];
   }));
@@ -224,6 +246,7 @@ async function readFieldValue(field) {
 
   if (field.type === "datetime-local") return input.value ? new Date(input.value).toISOString() : null;
   if (field.type === "number") return Math.trunc(Number(input.value)) || 0;
+  if (field.type === "checkbox") return input.checked;
   return input.value.trim();
 }
 

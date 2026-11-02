@@ -215,6 +215,11 @@
           status: "pending"
         });
 
+        const { error: notificationError } = await client.functions.invoke("admin-notifications", {
+          body: { type: "signup", user_id: data.user.id }
+        });
+        if (notificationError) console.error("Signup notification failed:", notificationError.message);
+
         showMessage("Your account is ready. Taking you back to your stay…");
         window.setTimeout(continueAfterLogin, 1000);
       } else {

@@ -267,7 +267,12 @@ approveButton.addEventListener("click", async () => {
     return;
   }
 
+  const applicationId = reviewDialog.dataset.applicationId;
   reviewDialog.close();
+  const { error: notificationError } = await supabase.functions.invoke("admin-notifications", {
+    body: { type: "approval", application_id: applicationId, site_url: window.location.origin }
+  });
+  if (notificationError) console.error("Approval notification failed:", notificationError.message);
   await loadMemberships();
 });
 

@@ -16,7 +16,17 @@
   const videoEmpty = document.getElementById("bonusVideoEmpty");
   const researchList = document.getElementById("researchList");
   const researchEmpty = document.getElementById("researchEmpty");
-  const processList = document.getElementById("processList");
+  const processFeatured = document.getElementById("processFeatured");
+  const featuredProcessMedia = document.getElementById("featuredProcessMedia");
+  const featuredProcessCategory = document.getElementById("featuredProcessCategory");
+  const featuredProcessTitle = document.getElementById("featuredProcessTitle");
+  const featuredProcessSummary = document.getElementById("featuredProcessSummary");
+  const featuredProcessUpdated = document.getElementById("featuredProcessUpdated");
+  const featuredProcessProgress = document.getElementById("featuredProcessProgress");
+  const featuredProcessLink = document.getElementById("featuredProcessLink");
+  const processProjectList = document.getElementById("processProjectList");
+  const processUpdateList = document.getElementById("processUpdateList");
+  const processVideoList = document.getElementById("processVideoList");
   const processEmpty = document.getElementById("processEmpty");
   const readerDialog = document.getElementById("researchReader");
   const readerCategory = document.getElementById("readerCategory");
@@ -164,38 +174,103 @@
     readerDialog.showModal();
   }
 
-  function renderProcess(item) {
-    const article = element("article", "members__process-item");
+  function isSafeLink(value) {
+    return value.startsWith("#") || value.startsWith("/") || isWebUrl(value);
+  }
 
-    if (item.image_path) {
-      const image = element("img");
-      image.src = item.image_path;
-      image.alt = "";
-      image.loading = "lazy";
-      article.append(image);
+  function processImage(path, alt = "") {
+    if (!path) return null;
+    const image = element("img");
+    image.src = path;
+    image.alt = alt;
+    image.loading = "lazy";
+    return image;
+  }
+
+  function processMeta(item) {
+    const meta = element("div", "members__process-meta");
+    if (item.updated_label) meta.append(element("span", "", item.updated_label));
+    if (item.progress_label) meta.append(element("span", "", item.progress_label));
+    return meta;
+  }
+
+  function processLink(item) {
+    if (!item.link_url || !isSafeLink(item.link_url)) return null;
+    const link = element("a", "members__process-link", item.link_label || "View project");
+    link.href = item.link_url;
+    if (isWebUrl(item.link_url)) {
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
     }
+    link.append(element("span", "", "→"));
+    return link;
+  }
 
-    const copy = element("div", "members__process-item-copy");
+  function renderProject(item) {
+    const article = element("article", "members__process-project");
+    const image = processImage(item.image_path, item.title);
+    if (image) article.append(image);
 
-    if (item.category) {
-      copy.append(element("span", "members__research-category", item.category));
-    }
-
-    copy.append(element("h3", "", item.title));
-
-    if (item.summary) {
-      copy.append(element("p", "", item.summary));
-    }
-
-    if (item.body) {
-      const button = element("button", "members__research-link", "Read");
-      button.type = "button";
-      button.addEventListener("click", () => openReader(item));
-      copy.append(button);
-    }
-
+    const copy = element("div", "members__process-project-copy");
+    if (item.category) copy.append(element("span", "members__process-category", item.category));
+    copy.append(element("h4", "", item.title));
+    if (item.summary) copy.append(element("p", "", item.summary));
+    copy.append(processMeta(item));
+    const link = processLink(item);
+    if (link) copy.append(link);
     article.append(copy);
     return article;
+  }
+
+  function renderUpdate(item) {
+    const article = element("article", "members__process-update");
+    const image = processImage(item.image_path, item.title);
+    if (image) article.append(image);
+
+    const copy = element("div", "members__process-update-copy");
+    if (item.category) copy.append(element("span", "members__process-category", item.category));
+    copy.append(element("h4", "", item.title));
+    if (item.summary) copy.append(element("p", "", item.summary));
+    copy.append(processMeta(item));
+    article.append(copy);
+    return article;
+  }
+
+  function renderVideo(item) {
+    const figure = element("article", "members__process-video");
+    const media = element("div", "members__process-video-media");
+    const image = processImage(item.poster_path || item.image_path, item.title);
+    if (image) media.append(image);
+    media.append(element("span", "members__process-play", "▶"));
+    if (item.duration_label) media.append(element("span", "members__process-duration", item.duration_label));
+    figure.append(media);
+    const copy = element("div", "members__process-video-copy");
+    copy.append(element("h4", "", item.title));
+    if (item.summary) copy.append(element("p", "", item.summary));
+    figure.append(copy);
+    return figure;
+  }
+
+  function renderFeatured(item) {
+    processFeatured.hidden = false;
+    featuredProcessMedia.replaceChildren();
+    const image = processImage(item.image_path, item.title);
+    if (image) featuredProcessMedia.append(image);
+    featuredProcessCategory.textContent = item.category || "Featured project";
+    featuredProcessTitle.textContent = item.title;
+    featuredProcessSummary.textContent = item.summary || "";
+    featuredProcessUpdated.textContent = item.updated_label || "";
+    featuredProcessProgress.textContent = item.progress_label || "";
+    const link = processLink(item);
+    featuredProcessLink.hidden = !link;
+    if (link) {
+      featuredProcessLink.href = link.href;
+      featuredProcessLink.textContent = `${item.link_label || "View project"} →`;
+      if (link.target) {
+        featuredProcessLink.target = link.target;
+        featuredProcessLink.rel = link.rel;
+      }
+    }
   }
 
   function renderResearch(item) {
@@ -243,12 +318,23 @@
   async function loadProcess(client) {
     const { data, error } = await client
       .from("member_process_items")
-      .select("id, title, summary, category, body, image_path")
+      .select("id, title, summary, body, category, image_path, content_type, is_featured, progress_label, updated_label, video_path, poster_path, duration_label, link_url, link_label")
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: false });
 
     if (error) throw error;
-    showList(processList, processEmpty, data || [], renderProcess);
+
+    const items = data || [];
+    const projects = items.filter(item => item.content_type === "project");
+    const updates = items.filter(item => item.content_type === "update");
+    const videos = items.filter(item => item.content_type === "video");
+    const featured = projects.find(item => item.is_featured) || projects[0];
+
+    processEmpty.hidden = items.length > 0;
+    if (featured) renderFeatured(featured);
+    processProjectList.replaceChildren(...projects.filter(item => item.id !== featured?.id).map(renderProject));
+    processUpdateList.replaceChildren(...updates.map(renderUpdate));
+    processVideoList.replaceChildren(...videos.map(renderVideo));
   }
 
   async function loadResearch(client) {
